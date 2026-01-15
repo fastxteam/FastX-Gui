@@ -14,6 +14,7 @@ from app.common.translator import Translator
 from ..common.style_sheet import StyleSheet
 from .home_interface import HomeInterface
 from .setting_interface import SettingInterface
+from .app_interface import AppInterface
 
 
 class Widget(QWidget):
@@ -218,11 +219,11 @@ class MainWindow(MSFluentWindow):
         loop = QEventLoop(self)
         QTimer.singleShot(1000, loop.quit)
 
-        self.homeInterface = HomeInterface(self)
-        self.appInterface = Widget('Application Interface', self)
+        self.homeInterface    = HomeInterface(self)
+        self.appInterface     = AppInterface(self)
         self.projectInterface = Widget('Project Interface', self)
         self.libraryInterface = Widget('Library Interface', self)
-        self.logInterface = Widget('Log Interface', self)
+        self.logInterface     = Widget('Log Interface', self)
         self.settingInterface = SettingInterface(self)
 
         self.initNavigation()
