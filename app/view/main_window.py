@@ -12,11 +12,14 @@ from qframelesswindow import FramelessWindow, TitleBar
 
 from app.common.translator import Translator
 from app.common.style_sheet import StyleSheet
+from app.common import resource
+
 from app.view.home_interface import HomeInterface
 from app.view.setting_interface import SettingInterface
 from app.view.app_interface import AppInterface
 from app.view.log_interface import LogInterface
 from app.view.rte_interface import RteInterface
+from app.view.func_interface import FuncInterface
 
 
 class Widget(QWidget):
@@ -113,6 +116,7 @@ class MainWindow(MSFluentWindow):
         self.homeInterface    = HomeInterface(self)
         self.appInterface     = AppInterface(self)
         self.projectInterface = RteInterface(self)
+        self.funcInterface = FuncInterface(self)
         self.libraryInterface = Widget('Library Interface', self)
         self.logInterface     = LogInterface(self)
         self.settingInterface = SettingInterface(self)
@@ -135,6 +139,7 @@ class MainWindow(MSFluentWindow):
         pos = NavigationItemPosition.SCROLL
         self.addSubInterface(self.projectInterface, FIF.CAR, t.project, position=pos)
         self.addSubInterface(self.logInterface, FIF.COMMAND_PROMPT, t.log, position=pos)
+        self.addSubInterface(self.funcInterface, FIF.CALORIES, t.log, position=pos)
 
         pos = NavigationItemPosition.BOTTOM
         self.navigationInterface.addItem(

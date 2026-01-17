@@ -1,5 +1,25 @@
 <RCC>
-    <qresource prefix="/gallery">
+    <qresource prefix="/app">
+        <file>i18n/app.zh_CN.qm</file>
+        <file>i18n/app.zh_HK.qm</file>
+        <file>images/Dvd.png</file>
+        <file>images/Gyro.jpg</file>
+        <file>images/MusicNote.png</file>
+        <file>images/SBR.jpg</file>
+        <file>images/Shoko1.jpg</file>
+        <file>images/Shoko2.jpg</file>
+        <file>images/Shoko3.jpg</file>
+        <file>images/Shoko4.jpg</file>
+        <file>images/Singer.png</file>
+        <file>images/Smiling_with_heart.png</file>
+        <file>images/alarms.png</file>
+        <file>images/banner_home_bg.png</file>
+        <file>images/bg37.jpg</file>
+        <file>images/chidanta.jpg</file>
+        <file>images/chidanta2.jpg</file>
+        <file>images/chidanta3.jpg</file>
+        <file>images/chidanta4.jpg</file>
+        <file>images/chidanta5.jpg</file>
         <file>images/controls/Acrylic.png</file>
         <file>images/controls/AnimatedIcon.png</file>
         <file>images/controls/AnimatedVisualPlayer.png</file>
@@ -7,8 +27,8 @@
         <file>images/controls/AppBarButton.png</file>
         <file>images/controls/AppBarSeparator.png</file>
         <file>images/controls/AppBarToggleButton.png</file>
-        <file>images/controls/AutomationProperties.png</file>
         <file>images/controls/AutoSuggestBox.png</file>
+        <file>images/controls/AutomationProperties.png</file>
         <file>images/controls/Border.png</file>
         <file>images/controls/BreadcrumbBar.png</file>
         <file>images/controls/Button.png</file>
@@ -98,57 +118,91 @@
         <file>images/controls/Viewbox.png</file>
         <file>images/controls/WebView.png</file>
         <file>images/controls/XamlUICommand.png</file>
+        <file>images/header.png</file>
+        <file>images/header1.png</file>
+        <file>images/ico/CAR-RTE.ico</file>
+        <file>images/ico/M3U8DL.ico</file>
         <file>images/icons/EmojiTabSymbols_black.svg</file>
         <file>images/icons/EmojiTabSymbols_white.svg</file>
         <file>images/icons/Grid_black.svg</file>
         <file>images/icons/Grid_white.svg</file>
         <file>images/icons/Menu_black.svg</file>
         <file>images/icons/Menu_white.svg</file>
-        <file>images/icons/Text_black.svg</file>
-        <file>images/icons/Text_white.svg</file>
         <file>images/icons/Price_black.svg</file>
         <file>images/icons/Price_white.svg</file>
-        <file>images/chidanta.jpg</file>
-        <file>images/chidanta2.jpg</file>
-        <file>images/chidanta3.jpg</file>
-        <file>images/chidanta4.jpg</file>
-        <file>images/chidanta5.jpg</file>
-        <file>images/header.png</file>
-        <file>images/header1.png</file>
+        <file>images/icons/Text_black.svg</file>
+        <file>images/icons/Text_white.svg</file>
         <file>images/kunkun.png</file>
         <file>images/logo.png</file>
+        <file>images/logo/Airplane.svg</file>
+        <file>images/logo/Alembic.svg</file>
+        <file>images/logo/Bandage.svg</file>
+        <file>images/logo/BarChart.svg</file>
+        <file>images/logo/Bento.svg</file>
+        <file>images/logo/Bookmark.svg</file>
+        <file>images/logo/Broom.svg</file>
+        <file>images/logo/Calendar.svg</file>
+        <file>images/logo/CardFileBox.svg</file>
+        <file>images/logo/Control.svg</file>
+        <file>images/logo/Cookie.svg</file>
+        <file>images/logo/Cyclone.svg</file>
+        <file>images/logo/FFmpeg.svg</file>
+        <file>images/logo/Film.svg</file>
+        <file>images/logo/Folder.svg</file>
+        <file>images/logo/Gear.svg</file>
+        <file>images/logo/Globe.svg</file>
+        <file>images/logo/Hammer.svg</file>
+        <file>images/logo/Hourglass.svg</file>
+        <file>images/logo/Inbox.svg</file>
+        <file>images/logo/Joystick.svg</file>
+        <file>images/logo/Key.svg</file>
+        <file>images/logo/Knot.svg</file>
+        <file>images/logo/Label.svg</file>
+        <file>images/logo/Ledger.svg</file>
+        <file>images/logo/Link.svg</file>
+        <file>images/logo/Monkey.svg</file>
+        <file>images/logo/Moon.svg</file>
+        <file>images/logo/Office.svg</file>
+        <file>images/logo/Package.svg</file>
+        <file>images/logo/Pencil.svg</file>
+        <file>images/logo/Pizza.svg</file>
+        <file>images/logo/Planet.svg</file>
+        <file>images/logo/Postal.svg</file>
+        <file>images/logo/Projector.svg</file>
+        <file>images/logo/Puzzle.svg</file>
+        <file>images/logo/Rocket.svg</file>
+        <file>images/logo/Scroll.svg</file>
+        <file>images/logo/Shield.svg</file>
+        <file>images/logo/Smileface.svg</file>
+        <file>images/logo/Syringe.svg</file>
+        <file>images/logo/Terminal.svg</file>
+        <file>images/logo/Timer.svg</file>
+        <file>images/logo/Unlocked.svg</file>
+        <file>images/logo/VideoCamera.svg</file>
+        <file>images/logo/Videocassette.svg</file>
+        <file>images/logo/Wastebasket.svg</file>
+        <file>images/logo/Whale.svg</file>
+        <file>images/logo/Window.svg</file>
         <file>images/shoko.png</file>
-        <file>images/Gyro.jpg</file>
-        <file>images/SBR.jpg</file>
-        <file>images/Dvd.png</file>
-        <file>images/Singer.png</file>
-        <file>images/MusicNote.png</file>
-        <file>images/Smiling_with_heart.png</file>
-        <file>images/Shoko1.jpg</file>
-        <file>images/Shoko2.jpg</file>
-        <file>images/Shoko3.jpg</file>
-        <file>images/Shoko4.jpg</file>
-
+        <file>images/tips.png</file>
+        <file>images/todo.png</file>
         <file>qss/dark/gallery_interface.qss</file>
         <file>qss/dark/home_interface.qss</file>
         <file>qss/dark/icon_interface.qss</file>
         <file>qss/dark/link_card.qss</file>
+        <file>qss/dark/main_window.qss</file>
+        <file>qss/dark/navigation_view_interface.qss</file>
         <file>qss/dark/sample_card.qss</file>
         <file>qss/dark/setting_interface.qss</file>
         <file>qss/dark/view_interface.qss</file>
-        <file>qss/dark/navigation_view_interface.qss</file>
-
         <file>qss/light/gallery_interface.qss</file>
         <file>qss/light/home_interface.qss</file>
         <file>qss/light/icon_interface.qss</file>
         <file>qss/light/link_card.qss</file>
+        <file>qss/light/main_window.qss</file>
+        <file>qss/light/navigation_view_interface.qss</file>
         <file>qss/light/sample_card.qss</file>
         <file>qss/light/setting_interface.qss</file>
         <file>qss/light/view_interface.qss</file>
-        <file>qss/light/navigation_view_interface.qss</file>
-
-        <file>i18n/gallery.zh_CN.qm</file>
-        <file>i18n/gallery.zh_HK.qm</file>
-
     </qresource>
 </RCC>

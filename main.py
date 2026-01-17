@@ -1,5 +1,8 @@
 # coding:utf-8
+import os
 import sys
+from inspect import getsourcefile
+from pathlib import Path
 
 from PyQt5.QtCore import Qt, QUrl, QSize, QEventLoop, QTimer, QTranslator
 from PyQt5.QtGui import QIcon, QDesktopServices
@@ -12,6 +15,8 @@ from app.common.config import cfg, Language
 
 
 if __name__ == '__main__':
+    os.chdir(Path(getsourcefile(lambda: 0)).resolve().parent)
+
     QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
@@ -24,7 +29,7 @@ if __name__ == '__main__':
     locale = cfg.get(cfg.language).value
     fluentTranslator = FluentTranslator(locale)
     galleryTranslator = QTranslator()
-    galleryTranslator.load(locale, "gallery", ".", ":/gallery/i18n")
+    galleryTranslator.load(locale, "app", ".", ":/app/i18n")
 
     app.installTranslator(fluentTranslator)
     app.installTranslator(galleryTranslator)

@@ -1,18 +1,21 @@
 {
     "Material": {
-        "AcrylicBlurRadius": 15
+        "AcrylicBlurRadius": 6
     },
     "Update": {
         "CheckUpdateAtStartUp": true
     },
     "Folders": {
-        "Download": "D:/00_Tools/CodeHub/Github/FastX-Gui/app/download",
-        "LocalMusic": []
+        "Download": "D:/Github/FastX-Gui/tools",
+        "LocalProject": [
+            "C:/Users/91974/Music",
+            "C:/Users/91974/Documents"
+        ]
     },
     "MainWindow": {
         "DpiScale": "Auto",
         "Language": "zh_CN",
-        "MicaEnabled": false
+        "MicaEnabled": true
     },
     "QFluentWidgets": {
         "FontFamilies": [
@@ -22,5 +25,8 @@
         ],
         "ThemeColor": "#ff009faa",
         "ThemeMode": "Light"
+    },
+    "Download": {
+        "SaveFolder": "C:/Users/91974/Downloads"
     }
 }

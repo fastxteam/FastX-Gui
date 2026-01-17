@@ -18,6 +18,8 @@ class StyleSheet(StyleSheetBase, Enum):
     NAVIGATION_VIEW_INTERFACE = "navigation_view_interface"
 
     def path(self, theme=Theme.AUTO):
+
         theme = qconfig.theme if theme == Theme.AUTO else theme
-        # return f":/gallery/qss/{theme.value.lower()}/{self.value}.qss"
-        return f"./app/resource/qss/{theme.value.lower()}/{self.value}.qss"
+
+        # 使用资源路径格式，注意资源文件中没有resource目录
+        return f":/app/qss/{theme.value.lower()}/{self.value}.qss"
