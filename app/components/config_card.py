@@ -10,7 +10,6 @@ from qfluentwidgets import (IconWidget, BodyLabel, FluentIcon, InfoBarIcon, Comb
                             PrimaryPushButton, LineEdit, GroupHeaderCardWidget, PushButton,
                             CompactSpinBox, SwitchButton, IndicatorPosition, PlainTextEdit,
                             ToolTipFilter, ConfigItem)
-
 from app.common.icon import Logo, PNG
 from app.common.config import cfg
 

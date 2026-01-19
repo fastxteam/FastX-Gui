@@ -12,4 +12,5 @@ class Translator(QObject):
         self.library = self.tr("Library")
         self.help = self.tr("Help")
         self.log = self.tr("Log")
+        self.rte = self.tr("Rte")
         self.settings = self.tr("Settings")

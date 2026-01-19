@@ -139,7 +139,7 @@ class MainWindow(MSFluentWindow):
         pos = NavigationItemPosition.SCROLL
         self.addSubInterface(self.projectInterface, FIF.CAR, t.project, position=pos)
         self.addSubInterface(self.logInterface, FIF.COMMAND_PROMPT, t.log, position=pos)
-        self.addSubInterface(self.funcInterface, FIF.CALORIES, t.log, position=pos)
+        self.addSubInterface(self.funcInterface, FIF.CALORIES, t.rte, position=pos)
 
         pos = NavigationItemPosition.BOTTOM
         self.navigationInterface.addItem(
