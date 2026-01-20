@@ -1,0 +1,4 @@
+FuncInterface, #scrollWidget {
+    border: none;
+    background: transparent
+}

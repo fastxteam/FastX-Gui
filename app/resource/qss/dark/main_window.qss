@@ -1,5 +1,6 @@
 Widget > QLabel {
     font: 24px 'Segoe UI', 'Microsoft YaHei';
+    background-color: rgb(32, 32, 32);
     color: white;
 }
 
@@ -17,6 +18,14 @@ CustomTitleBar>QLabel#titleLabel {
     padding: 0 10px;
     color: white;
 }
+
+CustomTitleBar>SearchLineEdit#searchLineEdit {
+    background: white;
+    font: 13px 'Microsoft YaHei';
+    padding: 0 10px;
+    color: white;
+}
+
 
 MinimizeButton {
     qproperty-normalColor: white;

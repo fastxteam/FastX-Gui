@@ -60,6 +60,7 @@ class CustomTitleBar(TitleBar):
 
         # add search line edit
         self.searchLineEdit = SearchLineEdit(self)
+        self.searchLineEdit.setObjectName('searchLineEdit')
         self.searchLineEdit.setPlaceholderText('搜索应用、脚本、工具、设置等')
         self.searchLineEdit.setFixedWidth(400)
         self.searchLineEdit.setClearButtonEnabled(True)
@@ -161,13 +162,17 @@ class MainWindow(MSFluentWindow):
         self.setMaximumWidth(1400)
         self.setWindowTitle('福瑞泰克软件中心MCU工具平台')
         self.setWindowIcon(QIcon(':/app/images/logo-m.png'))
-        self.titleBar.setAttribute(Qt.WA_StyledBackground)
+        # self.titleBar.setAttribute(Qt.WA_StyledBackground)
+        QApplication.setQuitOnLastWindowClosed(False)
+        self.setCustomBackgroundColor(QColor(240, 244, 249), QColor(32, 32, 32))
+        self.setMicaEffectEnabled(True)
 
         desktop = QApplication.desktop().availableGeometry()
         w, h = desktop.width(), desktop.height()
         self.move(w // 2 - self.width() // 2, h // 2 - self.height() // 2)
         self.__setQss()
         self.show()
+        QApplication.processEvents()
 
     def __setQss(self):
         """ set style sheet """

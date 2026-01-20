@@ -9,10 +9,10 @@ from PyQt5.QtWidgets import QWidget, QHBoxLayout, QFileDialog
 from qfluentwidgets import (IconWidget, BodyLabel, FluentIcon, InfoBarIcon, ComboBox,
                             PrimaryPushButton, LineEdit, GroupHeaderCardWidget, PushButton,
                             CompactSpinBox, SwitchButton, IndicatorPosition, PlainTextEdit,
-                            ToolTipFilter, ConfigItem)
+                            ToolTipFilter, ConfigItem, SettingCardGroup)
+from qfluentwidgets import FluentIcon as FIF
 from app.common.icon import Logo, PNG
 from app.common.config import cfg
-
 
 class BasicConfigCard(GroupHeaderCardWidget):
     """ Basic config card """
@@ -40,9 +40,9 @@ class BasicConfigCard(GroupHeaderCardWidget):
         self.setBorderRadius(8)
 
         self.toolsEngineComboBox.setMinimumWidth(120)
-        self.toolsEngineComboBox.addItem(self.tr("L2 Func"), userData="FUNC")
-        self.toolsEngineComboBox.addItem(self.tr("Ipc Com"), userData="IPC")
-        self.toolsEngineComboBox.addItem(self.tr("Srp Com"), userData="SRP")
+        self.toolsEngineComboBox.addItem(self.tr("L2 Func"), userData="Func")
+        self.toolsEngineComboBox.addItem(self.tr("Ipc Com"), userData="Ipc")
+        self.toolsEngineComboBox.addItem(self.tr("Srp Com"), userData="Srp")
 
         self.toolsEngineComboBox.setMinimumWidth(120)
         self.chooseMappingTableButton.setFixedWidth(120)
@@ -50,6 +50,11 @@ class BasicConfigCard(GroupHeaderCardWidget):
         self.chooseInterfaceButton.setFixedWidth(120)
         self.outputFolderButton.setFixedWidth(120)
         self.exeButton.setFixedWidth(120)
+
+        self.chooseMappingTableButton.setIcon(FIF.DOCUMENT)
+        self.chooseDataTypeButton.setIcon(FIF.DOCUMENT)
+        self.chooseInterfaceButton.setIcon(FIF.DOCUMENT)
+        self.outputFolderButton.setIcon(FIF.FOLDER)
 
         self.exeButton.setEnabled(True)
         self.chooseDataTypeButton.setEnabled(False)
@@ -102,6 +107,7 @@ class BasicConfigCard(GroupHeaderCardWidget):
         self.toolBarLayout.addStretch(1)
         self.toolBarLayout.addWidget(self.exeButton, 0, Qt.AlignmentFlag.AlignRight)
         self.toolBarLayout.setAlignment(Qt.AlignmentFlag.AlignVCenter)
+
         self.vBoxLayout.addLayout(self.toolBarLayout)
 
     def _onChooseMappingTableButtonClicked(self):

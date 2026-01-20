@@ -1,0 +1,4 @@
+FuncInterface, #scrollWidget, #vBoxLayout, #rteInterface {
+    border: none;
+    background: transparent
+}

@@ -1,6 +1,6 @@
 {
     "Material": {
-        "AcrylicBlurRadius": 6
+        "AcrylicBlurRadius": 0
     },
     "Update": {
         "CheckUpdateAtStartUp": true
@@ -13,16 +13,16 @@
         ]
     },
     "MainWindow": {
-        "DpiScale": "Auto",
+        "DpiScale": 1,
         "Language": "en_US",
         "MicaEnabled": true
     },
     "FastRte": {
         "FastRteDataTypeFolder": "D:/Github/FastX-Gui/i18n.md",
         "FastRteInterfaceFolder": "D:/Github/FastX-Gui/main.py",
-        "FastRteMappingTableFolder": "D:/Github/FastX-Gui/i18n.md",
+        "FastRteMappingTableFolder": "D:/Github/FastX-Gui/main.pro",
         "FastRteOutputFolder": "C:/Users/91974/Downloads/python-cli-toolset",
-        "FastRteToolsEngine": "L2 Func"
+        "FastRteToolsEngine": "Ipc Com"
     },
     "QFluentWidgets": {
         "FontFamilies": [
@@ -31,6 +31,6 @@
             "PingFang SC"
         ],
         "ThemeColor": "#ff009faa",
-        "ThemeMode": "Light"
+        "ThemeMode": "Dark"
     }
 }
