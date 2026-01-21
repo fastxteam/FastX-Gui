@@ -40,8 +40,8 @@ class FuncInterface(ScrollArea):
         self.setWidgetResizable(True)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
-        self.vBoxLayout.setSpacing(10)
-        self.vBoxLayout.setContentsMargins(0, 0, 10, 10)
+        self.vBoxLayout.setSpacing(20)
+        self.vBoxLayout.setContentsMargins(10, 0, 10, 10)
         self.vBoxLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self.vBoxLayout.addWidget(self.funcInfoCard, 0, Qt.AlignmentFlag.AlignTop)

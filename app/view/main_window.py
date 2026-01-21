@@ -134,13 +134,13 @@ class MainWindow(MSFluentWindow):
         # add navigation items
         t = Translator()
         pos = NavigationItemPosition.TOP
-        self.addSubInterface(self.homeInterface, FIF.HOME, t.home, FIF.HOME_FILL, position=pos)
-        self.addSubInterface(self.appInterface, FIF.APPLICATION, t.app, position=pos)
+        self.addSubInterface(self.homeInterface, FIF.HOME, t.home, FIF.HOME_FILL, position=pos, isTransparent=True)
+        self.addSubInterface(self.appInterface, FIF.APPLICATION, t.app, position=pos, isTransparent=False)
 
         pos = NavigationItemPosition.SCROLL
-        self.addSubInterface(self.projectInterface, FIF.CAR, t.project, position=pos)
-        self.addSubInterface(self.logInterface, FIF.COMMAND_PROMPT, t.log, position=pos)
-        self.addSubInterface(self.funcInterface, FIF.CALORIES, t.rte, position=pos)
+        self.addSubInterface(self.projectInterface, FIF.CAR, t.project, position=pos, isTransparent=False)
+        self.addSubInterface(self.logInterface, FIF.COMMAND_PROMPT, t.log, position=pos, isTransparent=False)
+        self.addSubInterface(self.funcInterface, FIF.CALORIES, t.rte, position=pos, isTransparent=True)
 
         pos = NavigationItemPosition.BOTTOM
         self.navigationInterface.addItem(
@@ -151,8 +151,8 @@ class MainWindow(MSFluentWindow):
             selectable=False,
             position=pos,
         )
-        self.addSubInterface(self.libraryInterface, FIF.BOOK_SHELF, t.library, FIF.LIBRARY_FILL, position=pos)
-        self.addSubInterface(self.settingInterface, FIF.SETTING, t.settings, position=pos)
+        self.addSubInterface(self.libraryInterface, FIF.BOOK_SHELF, t.library, FIF.LIBRARY_FILL, position=pos, isTransparent=False)
+        self.addSubInterface(self.settingInterface, FIF.SETTING, t.settings, position=pos, isTransparent=False)
 
         self.navigationInterface.setCurrentItem(self.homeInterface.objectName())
 
