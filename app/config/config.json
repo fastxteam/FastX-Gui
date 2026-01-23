@@ -1,4 +1,9 @@
 {
+    "Register": {
+        "ActivationCode": "",
+        "Email": "",
+        "RememberMe": true
+    },
     "Material": {
         "AcrylicBlurRadius": 0
     },

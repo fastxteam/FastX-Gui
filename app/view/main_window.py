@@ -13,6 +13,8 @@ from qframelesswindow import FramelessWindow, TitleBar
 from app.common.icon import Icon
 from app.common.translator import Translator
 from app.common.style_sheet import StyleSheet
+from app.common.signal_bus import signalBus
+from app.common.config import cfg
 from app.common import resource
 
 from app.view.home_interface import HomeInterface
@@ -92,43 +94,25 @@ class MainWindow(MSFluentWindow):
     def __init__(self):
         # 先调用父类初始化
         super().__init__()
-
-        # 设置自定义标题栏
-        self.setTitleBar(CustomTitleBar(self))
-        self.titleBar.raise_()
-
-        # 调整布局边距以适应标题栏高度
-        self.hBoxLayout.setContentsMargins(0, 48, 0, 0)  # 底部增加40px给状态栏
-
-        # # 创建启动页面
-        # self.splashScreen = SplashScreen(self.windowIcon(), self)
-        # self.splashScreen.setIconSize(QSize(102, 102))
-        # # 显示窗口
-        # self.show()
+        self.initWindow()
 
         # 创建子界面
-        self.createSubInterface()
-
-    def createSubInterface(self):
-        # create sub interface
-        loop = QEventLoop(self)
-        QTimer.singleShot(1000, loop.quit)
-
-        self.homeInterface    = HomeInterface(self)
-        self.appInterface     = AppInterface(self)
+        self.homeInterface = HomeInterface(self)
+        self.appInterface = AppInterface(self)
         self.projectInterface = RteInterface(self)
         self.funcInterface = FuncInterface(self)
         self.libraryInterface = Widget('Library Interface', self)
-        self.logInterface     = LogInterface(self)
+        self.logInterface = LogInterface(self)
         self.settingInterface = SettingInterface(self)
 
+        # 创建信号连接到槽
+        self.connectSignalToSlot()
+
+        # add items to navigation interface
         self.initNavigation()
-        self.initWindow()
 
-        # 隐藏启动页面
-        # self.splashScreen.finish()
-
-        loop.exec_()
+    def connectSignalToSlot(self):
+        signalBus.micaEnableChanged.connect(self.setMicaEffectEnabled)
 
     def initNavigation(self):
         # add navigation items
@@ -141,6 +125,7 @@ class MainWindow(MSFluentWindow):
         self.addSubInterface(self.projectInterface, FIF.CAR, t.project, position=pos, isTransparent=False)
         self.addSubInterface(self.logInterface, FIF.COMMAND_PROMPT, t.log, position=pos, isTransparent=False)
         self.addSubInterface(self.funcInterface, FIF.CALORIES, t.rte, position=pos, isTransparent=True)
+        self.addSubInterface(self.libraryInterface, FIF.BOOK_SHELF, self.tr("Library"), FIF.LIBRARY_FILL, position=pos, isTransparent=False)
 
         pos = NavigationItemPosition.BOTTOM
         self.navigationInterface.addItem(
@@ -151,26 +136,32 @@ class MainWindow(MSFluentWindow):
             selectable=False,
             position=pos,
         )
-        self.addSubInterface(self.libraryInterface, FIF.BOOK_SHELF, self.tr("Library"), FIF.LIBRARY_FILL, position=pos, isTransparent=False)
-        self.addSubInterface(self.settingInterface, self.tr('Settings'), t.settings, Icon.SETTINGS_FILLED, position=pos, isTransparent=False)
-
+        self.addSubInterface(self.settingInterface, Icon.SETTINGS, self.tr('Settings'), Icon.SETTINGS_FILLED, position=pos, isTransparent=False)
         self.navigationInterface.setCurrentItem(self.homeInterface.objectName())
+        self.splashScreen.finish()
 
     def initWindow(self):
-        self.resize(1350, 850)
-        self.setMinimumWidth(1250)
-        self.setMaximumWidth(1400)
-        self.setWindowTitle('福瑞泰克软件中心MCU工具平台')
+        self.resize(960, 780)
+        self.setMinimumWidth(960)
+        self.setMaximumWidth(960)
+        # 设置自定义标题栏
+        self.setTitleBar(CustomTitleBar(self))
+        self.titleBar.raise_()
+        # 调整布局边距以适应标题栏高度
+        self.hBoxLayout.setContentsMargins(0, 48, 0, 0)
+        # 设置图标,标题
         self.setWindowIcon(QIcon(':/app/images/logo-m.png'))
-        # self.titleBar.setAttribute(Qt.WA_StyledBackground)
-        QApplication.setQuitOnLastWindowClosed(False)
-        self.setCustomBackgroundColor(QColor(240, 244, 249), QColor(32, 32, 32))
-        self.setMicaEffectEnabled(True)
+        self.setWindowTitle('福瑞泰克软件中心MCU工具平台')
+        self.__setQss()
 
+        # create splash screen
+        self.splashScreen = SplashScreen(self.windowIcon(), self)
+        self.splashScreen.setIconSize(QSize(106, 106))
+        self.splashScreen.raise_()
+        # desktop show
         desktop = QApplication.desktop().availableGeometry()
         w, h = desktop.width(), desktop.height()
         self.move(w // 2 - self.width() // 2, h // 2 - self.height() // 2)
-        self.__setQss()
         self.show()
         QApplication.processEvents()
 
@@ -179,6 +170,12 @@ class MainWindow(MSFluentWindow):
         # initialize style sheet
         self.setObjectName('mainWindow')
         StyleSheet.MAIN_WINDOW.apply(self)
+        self.setMicaEffectEnabled(cfg.get(cfg.micaEnabled))
+
+    def resizeEvent(self, e):
+        super().resizeEvent(e)
+        if hasattr(self, 'splashScreen'):
+            self.splashScreen.resize(self.size())
 
     def showMessageBox(self):
         w = MessageBox(
