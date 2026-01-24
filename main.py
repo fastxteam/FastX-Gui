@@ -41,8 +41,9 @@ if __name__ == '__main__':
     app.installTranslator(fluentTranslator)
     app.installTranslator(galleryTranslator)
 
-    w = RegisterWindow()
-    w.loginSignal.connect(showMainWindow)
-    w.show()
+    # w = RegisterWindow()
+    # w.loginSignal.connect(showMainWindow)
+    # w.show()
+    showMainWindow()
 
     app.exec()

@@ -14,3 +14,4 @@ class Translator(QObject):
         self.log = self.tr("Log")
         self.rte = self.tr("Rte")
         self.settings = self.tr("Settings")
+        self.navigation = self.tr('Navigation')

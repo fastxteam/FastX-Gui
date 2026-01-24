@@ -54,9 +54,7 @@ class AppInfoCard(SimpleCardWidget):
         self.nameLabel = TitleLabel(self.tr('RTE Connector'), self)
         self.updateButton = PrimaryPushButton(self.tr("Update"), self)
         self.companyLabel = HyperlinkLabel(QUrl('https://github.com/fastxteam/FastX-Gui'), 'FastXTeam', self)
-
-        self.versionWidget = StatisticsWidget(
-            self.tr('Version'), 'v0.1.0', self)
+        self.versionWidget = StatisticsWidget(self.tr('Version'), 'v0.1.0', self)
         self.fileSizeWidget = StatisticsWidget(self.tr('File Size'), '19MB', self)
         self.updateTimeWidget = StatisticsWidget(self.tr('Update Time'), '2026-01-19', self)
 

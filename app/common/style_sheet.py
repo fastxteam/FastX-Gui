@@ -16,7 +16,7 @@ class StyleSheet(StyleSheetBase, Enum):
     RTE_INTERFACE = "rte_interface"
     SETTING_INTERFACE = "setting_interface"
     GALLERY_INTERFACE = "gallery_interface"
-    NAVIGATION_VIEW_INTERFACE = "navigation_view_interface"
+    LIBRARY_VIEW_INTERFACE = "library_view_interface"
 
     def path(self, theme=Theme.AUTO):
 

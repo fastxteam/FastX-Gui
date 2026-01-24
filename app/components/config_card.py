@@ -51,11 +51,6 @@ class BasicConfigCard(GroupHeaderCardWidget):
         self.outputFolderButton.setFixedWidth(120)
         self.exeButton.setFixedWidth(120)
 
-        self.chooseMappingTableButton.setIcon(FIF.DOCUMENT)
-        self.chooseDataTypeButton.setIcon(FIF.DOCUMENT)
-        self.chooseInterfaceButton.setIcon(FIF.DOCUMENT)
-        self.outputFolderButton.setIcon(FIF.FOLDER)
-
         self.exeButton.setEnabled(True)
         self.chooseDataTypeButton.setEnabled(False)
         self.chooseInterfaceButton.setEnabled(False)

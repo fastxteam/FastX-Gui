@@ -27,7 +27,7 @@
         "FastRteInterfaceFolder": "D:/Github/FastX-Gui/main.py",
         "FastRteMappingTableFolder": "D:/Github/FastX-Gui/main.pro",
         "FastRteOutputFolder": "C:/Users/91974/Downloads/python-cli-toolset",
-        "FastRteToolsEngine": "Ipc Com"
+        "FastRteToolsEngine": "L2 Func"
     },
     "QFluentWidgets": {
         "FontFamilies": [
@@ -36,6 +36,6 @@
             "PingFang SC"
         ],
         "ThemeColor": "#ff009faa",
-        "ThemeMode": "Light"
+        "ThemeMode": "Dark"
     }
 }

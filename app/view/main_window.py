@@ -10,6 +10,14 @@ from qfluentwidgets import (NavigationItemPosition, MessageBox, setTheme, Theme,
                             InfoBarPosition)
 from qframelesswindow import FramelessWindow, TitleBar
 
+from app.view.home_interface import HomeInterface
+from app.view.setting_interface import SettingInterface
+from app.view.app_interface import AppInterface
+from app.view.log_interface import LogInterface
+from app.view.rte_interface import RteInterface
+from app.view.func_interface import FuncInterface
+from app.view.library_interface import LibraryViewInterface
+
 from app.common.icon import Icon
 from app.common.translator import Translator
 from app.common.style_sheet import StyleSheet
@@ -17,12 +25,7 @@ from app.common.signal_bus import signalBus
 from app.common.config import cfg
 from app.common import resource
 
-from app.view.home_interface import HomeInterface
-from app.view.setting_interface import SettingInterface
-from app.view.app_interface import AppInterface
-from app.view.log_interface import LogInterface
-from app.view.rte_interface import RteInterface
-from app.view.func_interface import FuncInterface
+from app.common.setting import VERSION
 
 
 class Widget(QWidget):
@@ -56,8 +59,7 @@ class CustomTitleBar(TitleBar):
 
         # add title label
         self.titleLabel = QLabel(self)
-        self.hBoxLayout.insertWidget(
-            2, self.titleLabel, 0, Qt.AlignLeft | Qt.AlignVCenter)
+        self.hBoxLayout.insertWidget(2, self.titleLabel, 0, Qt.AlignLeft | Qt.AlignVCenter)
         self.titleLabel.setObjectName('titleLabel')
         self.window().windowTitleChanged.connect(self.setTitle)
 
@@ -81,6 +83,7 @@ class CustomTitleBar(TitleBar):
         self.hBoxLayout.addLayout(self.vBoxLayout, 0)
 
     def setTitle(self, title):
+        StyleSheet.MAIN_WINDOW.apply(self)
         self.titleLabel.setText(title)
         self.titleLabel.adjustSize()
 
@@ -101,7 +104,7 @@ class MainWindow(MSFluentWindow):
         self.appInterface = AppInterface(self)
         self.projectInterface = RteInterface(self)
         self.funcInterface = FuncInterface(self)
-        self.libraryInterface = Widget('Library Interface', self)
+        self.libraryInterface = LibraryViewInterface(self)
         self.logInterface = LogInterface(self)
         self.settingInterface = SettingInterface(self)
 
@@ -118,13 +121,13 @@ class MainWindow(MSFluentWindow):
         # add navigation items
         t = Translator()
         pos = NavigationItemPosition.TOP
-        self.addSubInterface(self.homeInterface, FIF.HOME, t.home, FIF.HOME_FILL, position=pos, isTransparent=True)
-        self.addSubInterface(self.appInterface, FIF.APPLICATION, t.app, position=pos, isTransparent=False)
+        self.addSubInterface(self.homeInterface, FIF.HOME, self.tr("Home"), FIF.HOME_FILL, position=pos, isTransparent=True)
+        self.addSubInterface(self.appInterface , FIF.APPLICATION, self.tr("App"), position=pos, isTransparent=False)
 
         pos = NavigationItemPosition.SCROLL
-        self.addSubInterface(self.projectInterface, FIF.CAR, t.project, position=pos, isTransparent=False)
-        self.addSubInterface(self.logInterface, FIF.COMMAND_PROMPT, t.log, position=pos, isTransparent=False)
-        self.addSubInterface(self.funcInterface, FIF.CALORIES, t.rte, position=pos, isTransparent=True)
+        self.addSubInterface(self.projectInterface, FIF.CAR, self.tr("Project"), position=pos, isTransparent=False)
+        self.addSubInterface(self.logInterface, FIF.COMMAND_PROMPT, self.tr("Log"), position=pos, isTransparent=False)
+        self.addSubInterface(self.funcInterface, FIF.CALORIES, self.tr("Rte"), position=pos, isTransparent=True)
         self.addSubInterface(self.libraryInterface, FIF.BOOK_SHELF, self.tr("Library"), FIF.LIBRARY_FILL, position=pos, isTransparent=False)
 
         pos = NavigationItemPosition.BOTTOM
@@ -141,9 +144,9 @@ class MainWindow(MSFluentWindow):
         self.splashScreen.finish()
 
     def initWindow(self):
-        self.resize(960, 780)
-        self.setMinimumWidth(960)
-        self.setMaximumWidth(960)
+        self.resize(1200, 860)
+        self.setMinimumWidth(1200)
+        self.setMaximumWidth(1200)
         # 设置自定义标题栏
         self.setTitleBar(CustomTitleBar(self))
         self.titleBar.raise_()
@@ -151,7 +154,7 @@ class MainWindow(MSFluentWindow):
         self.hBoxLayout.setContentsMargins(0, 48, 0, 0)
         # 设置图标,标题
         self.setWindowIcon(QIcon(':/app/images/logo-m.png'))
-        self.setWindowTitle('福瑞泰克软件中心MCU工具平台')
+        self.setWindowTitle(f'FastXGuI {VERSION}')
         self.__setQss()
 
         # create splash screen
