@@ -6,8 +6,9 @@ from qfluentwidgets import FluentIcon as FIF
 from PIL import Image
 import numpy as np
 
-from ..components.link_card import LinkCardView
-from ..common.style_sheet import StyleSheet
+from app.components.link_card import LinkCardView
+from app.common.style_sheet import StyleSheet
+from app.components.type_writer import TypewriterLabel
 
 
 class BannerWidget(QWidget):
@@ -17,7 +18,7 @@ class BannerWidget(QWidget):
         self.setMaximumHeight(320)
 
         self.vBoxLayout = QVBoxLayout(self)
-        self.galleryLabel = QLabel(f'FastX', self)
+        self.galleryLabel = QLabel(f'', self)
         self.galleryLabel.setStyleSheet("color: white;font-size: 30px; font-weight: 600;")
         # self.banner = QPixmap('./app/resource/images/bg37.jpg')
         self.img = Image.open("./app/resource/images/bg37.jpg")
@@ -64,8 +65,9 @@ class BannerWidget(QWidget):
 class HomeInterface(ScrollArea):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
-        self.banner = BannerWidget(self)
         self.view = QWidget(self)
+        self.banner = BannerWidget(self.view)
+        self.intro = TypewriterLabel(self.view)
 
         self.__initWidget()
         self.__initLayout()
@@ -86,6 +88,7 @@ class HomeInterface(ScrollArea):
         self.vBoxLayout.setContentsMargins(0, 0, 0, 0)
         self.vBoxLayout.setSpacing(25)
         self.vBoxLayout.addWidget(self.banner)
+        self.vBoxLayout.addWidget(self.intro)
         self.vBoxLayout.setAlignment(Qt.AlignTop)
 
     def loadSamples(self):

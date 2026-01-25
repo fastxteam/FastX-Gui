@@ -8,14 +8,13 @@ from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QSp
 from qfluentwidgets import (NavigationItemPosition, MessageBox, setTheme, Theme, MSFluentWindow, isDarkTheme,
                             NavigationAvatarWidget, SearchLineEdit, qrouter, SubtitleLabel, setFont, SplashScreen,
                             IndeterminateProgressBar, ProgressBar, PushButton, FluentIcon as FIF, InfoBar,
-                            InfoBarPosition, SystemTrayMenu)
+                            InfoBarPosition, SystemTrayMenu, NavigationBarPushButton)
 from qframelesswindow import FramelessWindow, TitleBar
 
 from app.view.home_interface import HomeInterface
 from app.view.setting_interface import SettingInterface
 from app.view.app_interface import AppInterface
 from app.view.log_interface import LogInterface
-from app.view.rte_interface import RteInterface
 from app.view.func_interface import FuncInterface
 from app.view.library_interface import LibraryViewInterface
 
@@ -26,7 +25,7 @@ from app.common.signal_bus import signalBus
 from app.common.config import cfg
 from app.common import resource
 from app.common.setting import VERSION
-from app.card.messagebox_custom import MessageBoxCloseWindow
+from app.card.messagebox_custom import MessageBoxCloseWindow, MessageBoxSupport
 
 
 class Widget(QWidget):
@@ -135,7 +134,6 @@ class MainWindow(MSFluentWindow):
         # 创建子界面
         self.homeInterface = HomeInterface(self)
         self.appInterface = AppInterface(self)
-        self.projectInterface = RteInterface(self)
         self.funcInterface = FuncInterface(self)
         self.libraryInterface = LibraryViewInterface(self)
         self.logInterface = LogInterface(self)
@@ -152,19 +150,21 @@ class MainWindow(MSFluentWindow):
         self.addSubInterface(self.appInterface , FIF.APPLICATION, self.tr("App"), position=pos, isTransparent=False)
 
         pos = NavigationItemPosition.SCROLL
-        self.addSubInterface(self.projectInterface, FIF.CAR, self.tr("Project"), position=pos, isTransparent=False)
+        self.addSubInterface(self.funcInterface, FIF.BRIGHTNESS, self.tr("FastRte"), position=pos, isTransparent=True)
         self.addSubInterface(self.logInterface, FIF.COMMAND_PROMPT, self.tr("Log"), position=pos, isTransparent=False)
-        self.addSubInterface(self.funcInterface, FIF.CALORIES, self.tr("Rte"), position=pos, isTransparent=True)
         self.addSubInterface(self.libraryInterface, FIF.BOOK_SHELF, self.tr("Library"), FIF.LIBRARY_FILL, position=pos, isTransparent=False)
 
         pos = NavigationItemPosition.BOTTOM
-        self.navigationInterface.addItem(
-            routeKey='Help',
-            icon=FIF.HELP,
-            text= self.tr("Help"),
-            onClick=self.showMessageBox,
-            selectable=False,
-            position=pos,
+        self.navigationInterface.addWidget(
+            'avatar',
+            NavigationBarPushButton(FIF.HEART, '赞赏', isSelectable=False),
+            lambda: MessageBoxSupport(
+                '支持作者🥰',
+                '此程序为免费开源项目，如果你付了钱请立刻退款\n如果喜欢本项目，可以微信赞赏送作者一杯咖啡☕\n您的支持就是作者开发和维护项目的动力🚀',
+                ':/app/images/sponsor.jpg',
+                self
+            ).exec(),
+            NavigationItemPosition.BOTTOM
         )
         self.addSubInterface(self.settingInterface, Icon.SETTINGS, self.tr('Settings'), Icon.SETTINGS_FILLED, position=pos, isTransparent=False)
         self.navigationInterface.setCurrentItem(self.homeInterface.objectName())
@@ -239,18 +239,6 @@ class MainWindow(MSFluentWindow):
         super().resizeEvent(e)
         if hasattr(self, 'splashScreen'):
             self.splashScreen.resize(self.size())
-
-    def showMessageBox(self):
-        w = MessageBox(
-            '刘小豪🥰',
-            '快歇一歇吧🚀',
-            self
-        )
-        w.yesButton.setText('好的')
-        w.cancelButton.setText('好的')
-
-        if w.exec():
-            QDesktopServices.openUrl(QUrl("https://afdian.net/a/zhiyiYo"))
 
     def _do_quit(self, e=None):
         """执行退出前的清理并退出程序

@@ -1,4 +1,4 @@
-SettingInterface,
+HomeInterface,
 #view {
     background-color: transparent;
 }
@@ -14,4 +14,10 @@ BannerWidget > #galleryLabel {
     background-color: transparent;
     color: white;
     padding-left: 28px;
+}
+
+TypewriterLabel{
+    font: 18px 'Segoe UI SemiBold', 'Microsoft YaHei SemiBold';
+    color: rgb(243, 243, 243);
+    background-color: transparent;
 }
