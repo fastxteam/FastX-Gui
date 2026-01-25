@@ -34,28 +34,27 @@ def isWin11():
 
 class Config(QConfig):
     """ Config of application """
-    # common settings
-    close_window_action = OptionsConfigItem("settings", "close_window_action", 'ask', OptionsValidator(['ask', 'minimize', "close"]), restart=True)
-
     # register
     rememberMe = ConfigItem("Register", "RememberMe", True)
     email = ConfigItem("Register", "Email", "")
     activationCode = ConfigItem("Register", "ActivationCode", "")
 
-    # folders
-    projectFolders   = ConfigItem("Folders", "LocalProject", [], FolderListValidator())
-    downloadFolder = ConfigItem( "Folders", "Download", "app/download", FolderValidator())
-
-    # main window
-    micaEnabled = ConfigItem("MainWindow", "MicaEnabled", isWin11(), BoolValidator())
-    dpiScale = OptionsConfigItem("MainWindow", "DpiScale", "Auto", OptionsValidator([1, 1.25, 1.5, 1.75, 2, "Auto"]), restart=True)
-    language = OptionsConfigItem("MainWindow", "Language", Language.AUTO, OptionsValidator(Language), LanguageSerializer(), restart=True)
-
-    # Material
+    # Settings/Project folders
+    projectFolders   = ConfigItem("Project folders", "LocalProject", [], FolderListValidator())
+    downloadFolder = ConfigItem( "Project folders", "Download", "app/download", FolderValidator())
+    # Settings/personalization
+    micaEnabled = ConfigItem("personalization", "MicaEnabled", isWin11(), BoolValidator())
+    dpiScale = OptionsConfigItem("personalization", "DpiScale", "Auto", OptionsValidator([1, 1.25, 1.5, 1.75, 2, "Auto"]), restart=True)
+    language = OptionsConfigItem("personalization", "Language", Language.AUTO, OptionsValidator(Language), LanguageSerializer(), restart=True)
+    # Settings/Material
     blurRadius  = RangeConfigItem("Material", "AcrylicBlurRadius", 15, RangeValidator(0, 40))
-
-    # software update
-    checkUpdateAtStartUp = ConfigItem("Update", "CheckUpdateAtStartUp", True, BoolValidator())
+    # Settings/Application
+    beta = ConfigItem("Application", "beta", False, BoolValidator())
+    close_window_action = OptionsConfigItem("Application", "close_window_action", 'ask', OptionsValidator(['ask', 'minimize', "close"]), restart=True)
+    # Settings/software update
+    checkUpdateAtStartUp = ConfigItem("software update", "CheckUpdateAtStartUp", True, BoolValidator())
+    # Settings/Beta
+    debug_card = ConfigItem("Beta", "debug_card", False, BoolValidator(), restart=True)
 
     # FastRte
     fastRteToolsEngine = OptionsConfigItem("FastRte", "FastRteToolsEngine", "L2 Func", OptionsValidator(["L2 Func", "Ipc Com", "Srp Com"]))

@@ -1,7 +1,8 @@
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, pyqtSlot, QRectF
 from PyQt5.QtGui import QPixmap, QPainter, QColor, QBrush, QPainterPath, QLinearGradient, QImage
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QHBoxLayout, QGraphicsDropShadowEffect
-from qfluentwidgets import TextEdit, SwitchButton, IndicatorPosition, PushButton, TitleLabel, BodyLabel, PrimaryPushSettingCard, SubtitleLabel, ScrollArea, isDarkTheme
+from qfluentwidgets import TextEdit, SwitchButton, IndicatorPosition, PushButton, TitleLabel, BodyLabel, \
+    PrimaryPushSettingCard, SubtitleLabel, ScrollArea, isDarkTheme, InfoBar, InfoBarIcon, InfoBarPosition
 from qfluentwidgets import FluentIcon as FIF
 from PIL import Image
 import numpy as np
@@ -68,7 +69,6 @@ class HomeInterface(ScrollArea):
         self.view = QWidget(self)
         self.banner = BannerWidget(self.view)
         self.intro = TypewriterLabel(self.view)
-
         self.__initWidget()
         self.__initLayout()
         self.loadSamples()

@@ -4,26 +4,27 @@
         "Email": "",
         "RememberMe": true
     },
-    "Material": {
-        "AcrylicBlurRadius": 0
-    },
-    "Update": {
-        "CheckUpdateAtStartUp": true
-    },
-    "settings": {
+    "Application": {
+        "beta": false,
         "close_window_action": "ask"
     },
-    "Folders": {
-        "Download": "D:/Github/FastX-Gui/tools",
-        "LocalProject": [
-            "C:/Users/91974/Music",
-            "C:/Users/91974/Documents"
-        ]
+    "Material": {
+        "AcrylicBlurRadius": 40
     },
-    "MainWindow": {
-        "DpiScale": 1,
+    "software update": {
+        "CheckUpdateAtStartUp": true
+    },
+    "Beta": {
+        "debug_card": false
+    },
+    "Project folders": {
+        "Download": "D:/Github/FastX-Gui/app/download",
+        "LocalProject": []
+    },
+    "personalization": {
+        "DpiScale": "Auto",
         "Language": "en_US",
-        "MicaEnabled": false
+        "MicaEnabled": true
     },
     "FastRte": {
         "FastRteDataTypeFolder": "D:/Github/FastX-Gui/i18n.md",
@@ -39,6 +40,6 @@
             "PingFang SC"
         ],
         "ThemeColor": "#ff009faa",
-        "ThemeMode": "Dark"
+        "ThemeMode": "Light"
     }
 }

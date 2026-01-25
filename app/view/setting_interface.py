@@ -89,6 +89,26 @@ class SettingInterface(ScrollArea):
             texts=['简体中文', '繁體中文', 'English', self.tr('Use system setting')],
             parent=self.personalGroup
         )
+
+        # material
+        self.materialGroup = SettingCardGroup(self.tr('Material'), self.scrollWidget)
+        self.blurRadiusCard = RangeSettingCard(
+            cfg.blurRadius,
+            FIF.ALBUM,
+            self.tr('Acrylic blur radius'),
+            self.tr('The greater the radius, the more blurred the image'),
+            self.materialGroup
+        )
+
+        # Application
+        self.appGroup = SettingCardGroup(self.tr('Application settings'), self.scrollWidget)
+        self.betaCard = SwitchSettingCard(
+            FIF.DEVELOPER_TOOLS,
+            self.tr('Beta experimental features'),
+            self.tr('When turned on, experimental features will be enabled'),
+            configItem=cfg.beta,
+            parent=self.appGroup
+        )
         self.closeWindowActionCard = ComboBoxSettingCard(
             cfg.close_window_action,
             FIF.MINIMIZE,
@@ -99,17 +119,7 @@ class SettingInterface(ScrollArea):
                 self.tr("minimize"),
                 self.tr("close")
             ],
-            parent = self.personalGroup
-        )
-
-        # material
-        self.materialGroup = SettingCardGroup(self.tr('Material'), self.scrollWidget)
-        self.blurRadiusCard = RangeSettingCard(
-            cfg.blurRadius,
-            FIF.ALBUM,
-            self.tr('Acrylic blur radius'),
-            self.tr('The greater the radius, the more blurred the image'),
-            self.materialGroup
+            parent = self.appGroup
         )
 
         # update software
@@ -122,7 +132,7 @@ class SettingInterface(ScrollArea):
             parent=self.updateSoftwareGroup
         )
 
-        # application
+        # About
         self.aboutGroup = SettingCardGroup(self.tr('About'), self.scrollWidget)
         self.helpCard = HyperlinkCard(
             HELP_URL,
@@ -190,9 +200,10 @@ class SettingInterface(ScrollArea):
         self.personalGroup.addSettingCard(self.themeColorCard)
         self.personalGroup.addSettingCard(self.zoomCard)
         self.personalGroup.addSettingCard(self.languageCard)
-        self.personalGroup.addSettingCard(self.closeWindowActionCard)
 
         self.materialGroup.addSettingCard(self.blurRadiusCard)
+        self.appGroup.addSettingCard(self.betaCard)
+        self.appGroup.addSettingCard(self.closeWindowActionCard)
         self.updateSoftwareGroup.addSettingCard(self.updateOnStartUpCard)
 
         self.aboutGroup.addSettingCard(self.helpCard)
@@ -202,10 +213,22 @@ class SettingInterface(ScrollArea):
         self.expandLayout.setContentsMargins(36, 10, 36, 0)
         self.expandLayout.addWidget(self.projectInThisPCGroup)
         self.expandLayout.addWidget(self.personalGroup)
+        self.expandLayout.addWidget(self.appGroup)
         self.expandLayout.addWidget(self.materialGroup)
         self.expandLayout.addWidget(self.updateSoftwareGroup)
         self.expandLayout.addWidget(self.aboutGroup)
+        self._betaEnable() if cfg.beta.value else None   #Beta
 
+
+    def _createBetaSetting(self):
+        self.BetaGroup = SettingCardGroup(self.tr('Beta'), self.scrollWidget)
+        self.debug_Card = SwitchSettingCard(
+                FIF.CODE,
+                self.tr('Debug Mode'),
+                self.tr('The global exception capture will be disabled, and there will be outputs in the commandline.(Code Running Only)'),
+                configItem=cfg.debug_card,
+                parent=self.BetaGroup
+        )
 
     def __showRestartTooltip(self):
         """ show restart tooltip """
@@ -222,9 +245,20 @@ class SettingInterface(ScrollArea):
             self, self.tr("Choose folder"), "./")
         if not folder or cfg.get(cfg.downloadFolder) == folder:
             return
-
         cfg.set(cfg.downloadFolder, folder)
         self.downloadFolderCard.setContent(folder)
+
+    def _betaEnable(self):
+        if cfg.beta.value:
+            self._createBetaSetting()
+            self.expandLayout.addWidget(self.BetaGroup)
+            self.BetaGroup.addSettingCard(self.debug_Card)
+            self.debug_Card.setVisible(True)
+            self.BetaGroup.setVisible(True)
+        else:
+            self.debug_Card.setValue(False)
+            self.debug_Card.setVisible(False)
+            self.BetaGroup.setVisible(False)
 
     def __connectSignalToSlot(self):
         """ connect signal to slot """
@@ -237,6 +271,9 @@ class SettingInterface(ScrollArea):
         cfg.themeChanged.connect(setTheme)
         self.themeColorCard.colorChanged.connect(lambda c: setThemeColor(c))
         self.micaCard.checkedChanged.connect(signalBus.micaEnableChanged)
+
+        # application
+        self.betaCard.checkedChanged.connect(self._betaEnable)
 
         # check update
         self.aboutCard.clicked.connect(signalBus.checkUpdateSig)
