@@ -1,7 +1,6 @@
 # coding:utf-8
 import sys
-
-from PyQt5.QtCore import Qt, QUrl, QSize, QEventLoop, QTimer, QDateTime
+from PyQt5.QtCore import Qt, QUrl, QSize, QEventLoop, QTimer, QDateTime, QPoint
 from PyQt5.QtGui import QIcon, QDesktopServices, QFont, QColor, QPainter
 from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QSplashScreen, QLabel, QStatusBar, QFrame, \
     QSystemTrayIcon, QAction
@@ -9,16 +8,16 @@ from qfluentwidgets import (NavigationItemPosition, MessageBox, setTheme, Theme,
                             NavigationAvatarWidget, SearchLineEdit, qrouter, SubtitleLabel, setFont, SplashScreen,
                             IndeterminateProgressBar, ProgressBar, PushButton, FluentIcon as FIF, InfoBar,
                             InfoBarPosition, SystemTrayMenu, NavigationBarPushButton, SystemThemeListener,
-                            SplitFluentWindow)
-from qframelesswindow import FramelessWindow, TitleBar
+                            SplitFluentWindow, FluentTitleBarButton)
 
-from app.common.background_manager import get_background_manager
+
 from app.view.home_interface import HomeInterface
 from app.view.setting_interface import SettingInterface
 from app.view.app_interface import AppInterface
 from app.view.log_interface import LogInterface
 from app.view.func_interface import FuncInterface
 from app.view.library_interface import LibraryViewInterface
+from app.view.tool_interface import ToolsInterface
 
 from app.common.icon import Icon
 from app.common.translator import Translator
@@ -27,72 +26,10 @@ from app.common.signal_bus import signalBus
 from app.common.config import cfg
 from app.common import resource
 from app.common.setting import VERSION
+from app.common.background_manager import get_background_manager
 from app.card.messagebox_custom import MessageBoxCloseWindow, MessageBoxSupport
+from app.components.custom_titlebar import CustomTitleBar1, CustomTitleBar
 
-
-class Widget(QWidget):
-    def __init__(self, text: str, parent=None):
-        super().__init__(parent=parent)
-        self.label = SubtitleLabel(text, self)
-        self.hBoxLayout = QHBoxLayout(self)
-
-        setFont(self.label, 24)
-        self.label.setAlignment(Qt.AlignCenter)
-        self.hBoxLayout.addWidget(self.label, 1, Qt.AlignCenter)
-        self.setObjectName(text.replace(' ', '-'))
-
-class CustomTitleBar(TitleBar):
-    """ Title bar with icon and title """
-
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.setFixedHeight(48)
-        self.hBoxLayout.removeWidget(self.minBtn)
-        self.hBoxLayout.removeWidget(self.maxBtn)
-        self.hBoxLayout.removeWidget(self.closeBtn)
-
-        # add window icon
-        self.iconLabel = QLabel(self)
-        self.iconLabel.setFixedSize(18, 18)
-        self.hBoxLayout.insertSpacing(0, 20)
-        self.hBoxLayout.insertWidget(1, self.iconLabel, 0, Qt.AlignLeft | Qt.AlignVCenter)
-        self.window().windowIconChanged.connect(self.setIcon)
-
-        # add title label
-        self.titleLabel = QLabel(self)
-        self.hBoxLayout.insertWidget(2, self.titleLabel, 0, Qt.AlignLeft | Qt.AlignVCenter)
-        self.titleLabel.setObjectName('titleLabel')
-        self.window().windowTitleChanged.connect(self.setTitle)
-
-        # add search line edit
-        self.searchLineEdit = SearchLineEdit(self)
-        self.searchLineEdit.setObjectName('searchLineEdit')
-        self.searchLineEdit.setPlaceholderText('搜索应用、脚本、工具、设置等')
-        self.searchLineEdit.setFixedWidth(400)
-        self.searchLineEdit.setClearButtonEnabled(True)
-
-        self.vBoxLayout = QVBoxLayout()
-        self.buttonLayout = QHBoxLayout()
-        self.buttonLayout.setSpacing(0)
-        self.buttonLayout.setContentsMargins(0, 0, 0, 0)
-        self.buttonLayout.setAlignment(Qt.AlignTop)
-        self.buttonLayout.addWidget(self.minBtn)
-        self.buttonLayout.addWidget(self.maxBtn)
-        self.buttonLayout.addWidget(self.closeBtn)
-        self.vBoxLayout.addLayout(self.buttonLayout)
-        self.vBoxLayout.addStretch(1)
-        self.hBoxLayout.addLayout(self.vBoxLayout, 0)
-
-    def setTitle(self, title):
-        StyleSheet.MAIN_WINDOW.apply(self)
-        self.titleLabel.setText(title)
-        self.titleLabel.adjustSize()
-
-    def setIcon(self, icon):
-        self.iconLabel.setPixmap(QIcon(icon).pixmap(18, 18))
-
-    def resizeEvent(self, e):
-        self.searchLineEdit.move((self.width() - self.searchLineEdit.width()) // 2, 8)
 
 class MainWindow(SplitFluentWindow):
     def __init__(self):
@@ -133,8 +70,10 @@ class MainWindow(SplitFluentWindow):
     def initWindow(self):
         self.resize(960, 800)
         self.setResizeEnabled(False)
+        self.titleBar.maxBtn.hide()
+        self.titleBar.setDoubleClickEnabled(False)
         # 设置自定义标题栏
-        # self.setTitleBar(CustomTitleBar(self))
+        # self.setTitleBar(CustomTitleBar1(self))
         # self.titleBar.raise_()
         # # 调整布局边距以适应标题栏高度
         # self.hBoxLayout.setContentsMargins(0, 48, 0, 0)
@@ -159,8 +98,9 @@ class MainWindow(SplitFluentWindow):
         self.homeInterface = HomeInterface(self)
         self.appInterface = AppInterface(self)
         self.funcInterface = FuncInterface(self)
-        self.libraryInterface = LibraryViewInterface(self)
+        self.toolInterface = ToolsInterface(self)
         self.logInterface = LogInterface(self)
+        self.libraryInterface = LibraryViewInterface(self)
         self.settingInterface = SettingInterface(self)
 
     def __connectSignalToSlot(self):
@@ -169,12 +109,13 @@ class MainWindow(SplitFluentWindow):
     def __initNavigation(self):
         # add navigation items
         t = Translator()
+
         pos = NavigationItemPosition.TOP
         # add user card with custom parameters
         self.userCard = self.navigationInterface.addUserCard(
             routeKey='userCard',
             avatar=':/app/images/shoko.png',
-            title='FastXTeamMG',
+            title='FastXTeam/MG',
             subtitle='wanqiang.liu@fastxteam.com',
             onClick=self.__showMessageBox,
             position=pos,
@@ -185,10 +126,12 @@ class MainWindow(SplitFluentWindow):
         self.navigationInterface.addSeparator()
 
         pos = NavigationItemPosition.SCROLL
-        self.addSubInterface(self.funcInterface, FIF.BRIGHTNESS, self.tr("FastRte"), pos, isTransparent=True)
-        self.addSubInterface(self.logInterface, FIF.COMMAND_PROMPT, self.tr("Log"), pos, isTransparent=False)
-        pos = NavigationItemPosition.BOTTOM
         self.addSubInterface(self.libraryInterface, FIF.BOOK_SHELF, self.tr("Library"), pos, isTransparent=False)
+        self.addSubInterface(self.funcInterface, FIF.BRIGHTNESS, self.tr("FastRte"), pos, isTransparent=True)
+        self.addSubInterface(self.toolInterface, FIF.DEVELOPER_TOOLS, self.tr("FastPackage"), pos, isTransparent=False)
+
+        pos = NavigationItemPosition.BOTTOM
+        self.addSubInterface(self.logInterface, FIF.COMMAND_PROMPT, self.tr("Log"), pos, isTransparent=False)
         # add custom widget to bottom
         self.navigationInterface.addItem(
             routeKey='sponsor',
@@ -205,7 +148,7 @@ class MainWindow(SplitFluentWindow):
             position=pos
         )
         self.addSubInterface(self.settingInterface, FIF.SETTING, self.tr('Settings'), pos, isTransparent=False)
-        # self.navigationInterface.setCurrentItem(self.homeInterface.objectName())
+        self.navigationInterface.setCurrentItem(self.homeInterface.objectName())
         self.splashScreen.finish()
 
     def __showMessageBox(self):

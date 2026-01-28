@@ -3,7 +3,8 @@ from PyQt5.QtCore import Qt, QEasingCurve
 from PyQt5.QtWidgets import QWidget, QStackedWidget, QVBoxLayout, QLabel, QHBoxLayout, QFrame, QSizePolicy
 from qfluentwidgets import (Pivot, qrouter, SegmentedWidget, TabBar, CheckBox, ComboBox,
                             TabCloseButtonDisplayMode, BodyLabel, SpinBox, BreadcrumbBar,
-                            SegmentedToggleToolWidget, FluentIcon, ScrollArea)
+                            SegmentedToggleToolWidget, ScrollArea)
+from qfluentwidgets import FluentIcon as FIF
 
 from app.common.style_sheet import StyleSheet
 from app.components.main_layout_card import GalleryInterface
@@ -192,7 +193,12 @@ class LibraryViewInterface(ScrollArea):
             stretch=1
         ).topLayout.setContentsMargins(25, 0, 0, 0)
 
+        # self.card = FolderCard(title="Help", icon=FIF.HELP)
+        # self.main_layout.addWidget()
+
     def __setQss(self):
         """ set style sheet """
         # initialize style sheet
+
+
         StyleSheet.LIBRARY_VIEW_INTERFACE.apply(self)

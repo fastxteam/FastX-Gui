@@ -43,9 +43,10 @@ def main():
     app.installTranslator(galleryTranslator)
 
     # create main window
-    w = RegisterWindow()
-    w.loginSignal.connect(showMainWindow)
-    w.show()
+    # w = RegisterWindow()
+    # w.loginSignal.connect(showMainWindow)
+    # w.show()
+    showMainWindow()
     app.exec()
 
 if __name__ == '__main__':

@@ -7,6 +7,7 @@ from qfluentwidgets import StyleSheetBase, Theme, isDarkTheme, qconfig
 class StyleSheet(StyleSheetBase, Enum):
     """ Style sheet  """
 
+    PIVOT = "pivot"
     MAIN_WINDOW = "main_window"
     LINK_CARD = "link_card"
     SAMPLE_CARD = "sample_card"
@@ -15,6 +16,7 @@ class StyleSheet(StyleSheetBase, Enum):
     ICON_INTERFACE = "icon_interface"
     VIEW_INTERFACE = "view_interface"
     RTE_INTERFACE = "rte_interface"
+    TOOLS_INTERFACE = "tools_interface"
     LOG_INTERFACE = "log_interface"
     SETTING_INTERFACE = "setting_interface"
     GALLERY_INTERFACE = "gallery_interface"

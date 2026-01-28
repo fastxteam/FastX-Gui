@@ -1,0 +1,17 @@
+ToolInterface, #view {
+    border: none;
+    background-color: transparent;
+}
+
+ScrollArea {
+    background-color: transparent;
+    border: none;
+}
+
+
+/* 标签 */
+QLabel#platformToolsLabel {
+    font: 33px 'Microsoft YaHei';
+    font-weight: 300;
+    background-color: transparent;
+}
