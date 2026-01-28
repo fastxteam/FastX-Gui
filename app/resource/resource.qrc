@@ -206,6 +206,7 @@
         <file>qss/dark/icon_interface.qss</file>
         <file>qss/dark/library_view_interface.qss</file>
         <file>qss/dark/link_card.qss</file>
+        <file>qss/dark/log_interface.qss</file>
         <file>qss/dark/main_window.qss</file>
         <file>qss/dark/rte_interface.qss</file>
         <file>qss/dark/sample_card.qss</file>
@@ -217,6 +218,7 @@
         <file>qss/light/icon_interface.qss</file>
         <file>qss/light/library_view_interface.qss</file>
         <file>qss/light/link_card.qss</file>
+        <file>qss/light/log_interface.qss</file>
         <file>qss/light/main_window.qss</file>
         <file>qss/light/rte_interface.qss</file>
         <file>qss/light/sample_card.qss</file>

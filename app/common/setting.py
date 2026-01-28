@@ -1,7 +1,5 @@
 # coding: utf-8
-import sys
 from pathlib import Path
-from PyQt5.QtCore import QStandardPaths
 
 # change DEBUG to False if you want to compile the code to exe
 DEBUG = "__compiled__" not in globals()

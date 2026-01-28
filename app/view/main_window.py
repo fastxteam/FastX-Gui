@@ -41,7 +41,6 @@ class Widget(QWidget):
         self.hBoxLayout.addWidget(self.label, 1, Qt.AlignCenter)
         self.setObjectName(text.replace(' ', '-'))
 
-
 class CustomTitleBar(TitleBar):
     """ Title bar with icon and title """
 
@@ -112,6 +111,12 @@ class MainWindow(SplitFluentWindow):
 
         # set sidebar expand width
         # self.navigationInterface.setFixedWidth(70)
+        self.navigationInterface.setAcrylicEnabled(True)                        # enable acrylic effect
+        # self.navigationInterface.setMinimumExpandWidth(120)                     # set sidebar expand width
+        self.navigationInterface.setReturnButtonVisible(False)                  #
+        self.navigationInterface.setCollapsible(True)                           # force sidebar to always expanded state (disable collapsible)
+        self.navigationInterface.setUpdateIndicatorPosOnCollapseFinished(True)  #
+        # self.navigationInterface.expand(useAni=False)                           # ensure sidebar is expanded
 
         # 创建信号连接到槽
         self.__connectSignalToSlot()
@@ -126,9 +131,8 @@ class MainWindow(SplitFluentWindow):
         self.themeListener.start()
 
     def initWindow(self):
-        self.resize(1200, 860)
-        self.setMinimumWidth(1200)
-        self.setMaximumWidth(1200)
+        self.resize(960, 800)
+        self.setResizeEnabled(False)
         # 设置自定义标题栏
         # self.setTitleBar(CustomTitleBar(self))
         # self.titleBar.raise_()
@@ -144,9 +148,10 @@ class MainWindow(SplitFluentWindow):
         self.splashScreen.setIconSize(QSize(106, 106))
         self.splashScreen.raise_()
         # desktop show
-        desktop = QApplication.desktop().availableGeometry()
+        desktop = QApplication.primaryScreen().availableGeometry()
         w, h = desktop.width(), desktop.height()
         self.move(w // 2 - self.width() // 2, h // 2 - self.height() // 2)
+        self.show() # ISSUE-FIX: 修复RegisterLogin无法跳转到Main-Window
         QApplication.processEvents()
 
     def __initInterface(self):
@@ -164,35 +169,55 @@ class MainWindow(SplitFluentWindow):
     def __initNavigation(self):
         # add navigation items
         t = Translator()
-        self.addSubInterface(self.homeInterface, FIF.HOME, self.tr("Home"), FIF.HOME_FILL, isTransparent=False)
-        self.addSubInterface(self.appInterface , FIF.APPLICATION, self.tr("App"), isTransparent=False)
-        self.navigationInterface.addSeparator()
-        self.addSubInterface(self.funcInterface, FIF.BRIGHTNESS, self.tr("FastRte"), isTransparent=True)
-        self.addSubInterface(self.logInterface, FIF.COMMAND_PROMPT, self.tr("Log"), isTransparent=False)
-        self.addSubInterface(self.libraryInterface, FIF.BOOK_SHELF, self.tr("Library"), FIF.LIBRARY_FILL, isTransparent=False)
-
-        # self.navigationInterface.addWidget(
-        #     routeKey='avatar',
-        #     widget=NavigationBarPushButton(FIF.HEART, '赞赏', isSelectable=False),
-        #     onClick=lambda: MessageBoxSupport(
-        #         '支持作者🥰',
-        #         '此程序为免费开源项目，如果你付了钱请立刻退款\n如果喜欢本项目，可以微信赞赏送作者一杯咖啡☕\n您的支持就是作者开发和维护项目的动力🚀',
-        #         ':/app/images/sponsor.jpg',
-        #         self
-        #     ).exec(),
-        #     position=NavigationItemPosition.BOTTOM,
-        # )
-        # add custom widget to bottom
-        self.navigationInterface.addWidget(
-            routeKey='avatar',
-            widget=NavigationAvatarWidget('zhiyiYo', 'resource/shoko.png'),
-            onClick=None,
-            position=NavigationItemPosition.BOTTOM,
+        pos = NavigationItemPosition.TOP
+        # add user card with custom parameters
+        self.userCard = self.navigationInterface.addUserCard(
+            routeKey='userCard',
+            avatar=':/app/images/shoko.png',
+            title='FastXTeamMG',
+            subtitle='wanqiang.liu@fastxteam.com',
+            onClick=self.__showMessageBox,
+            position=pos,
+            aboveMenuButton=False  # place below the expand/collapse button
         )
+        self.addSubInterface(self.homeInterface, FIF.HOME, self.tr("Home"), pos, isTransparent=False)
+        self.addSubInterface(self.appInterface , FIF.APPLICATION, self.tr("App"), pos, isTransparent=False)
+        self.navigationInterface.addSeparator()
 
-        self.addSubInterface(self.settingInterface, Icon.SETTINGS, self.tr('Settings'), Icon.SETTINGS_FILLED, isTransparent=False)
-        self.navigationInterface.setCurrentItem(self.homeInterface.objectName())
+        pos = NavigationItemPosition.SCROLL
+        self.addSubInterface(self.funcInterface, FIF.BRIGHTNESS, self.tr("FastRte"), pos, isTransparent=True)
+        self.addSubInterface(self.logInterface, FIF.COMMAND_PROMPT, self.tr("Log"), pos, isTransparent=False)
+        pos = NavigationItemPosition.BOTTOM
+        self.addSubInterface(self.libraryInterface, FIF.BOOK_SHELF, self.tr("Library"), pos, isTransparent=False)
+        # add custom widget to bottom
+        self.navigationInterface.addItem(
+            routeKey='sponsor',
+            icon=FIF.HEART,
+            text=self.tr('sponsor'),
+            onClick=lambda: MessageBoxSupport(
+                '支持作者🥰',
+                '此程序为免费开源项目，如果你付了钱请立刻退款\n如果喜欢本项目，可以微信赞赏送作者一杯咖啡☕\n您的支持就是作者开发和维护项目的动力🚀',
+                ':/app/images/sponsor.jpg',
+                self
+            ).exec(),
+            selectable=False,
+            tooltip=self.tr('sponsor this tools'),
+            position=pos
+        )
+        self.addSubInterface(self.settingInterface, FIF.SETTING, self.tr('Settings'), pos, isTransparent=False)
+        # self.navigationInterface.setCurrentItem(self.homeInterface.objectName())
         self.splashScreen.finish()
+
+    def __showMessageBox(self):
+        w = MessageBox(
+            'User Card',
+            'This is a navigation user card that displays avatar, title and subtitle.\n\n'
+            'Placement:\n'
+            '• aboveMenuButton=True: Place above expand/collapse button\n'
+            '• aboveMenuButton=False: Place below menu button (default)',
+            self
+        )
+        w.exec_()
 
     def __initSystemTray(self):
         """初始化系统托盘"""
@@ -209,14 +234,11 @@ class MainWindow(SplitFluentWindow):
         show_action.triggered.connect(self.showNormal)
         show_action.triggered.connect(self.activateWindow)
         tray_menu.addAction(show_action)
-
         tray_menu.addSeparator()
-
         # 打开设置界面
         setting_action = QAction('设置', self)
         setting_action.triggered.connect(self._open_settings)
         tray_menu.addAction(setting_action)
-
         # 退出程序
         quit_action = QAction('退出', self)
         quit_action.triggered.connect(self._quitApp)

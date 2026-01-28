@@ -15,6 +15,7 @@ class StyleSheet(StyleSheetBase, Enum):
     ICON_INTERFACE = "icon_interface"
     VIEW_INTERFACE = "view_interface"
     RTE_INTERFACE = "rte_interface"
+    LOG_INTERFACE = "log_interface"
     SETTING_INTERFACE = "setting_interface"
     GALLERY_INTERFACE = "gallery_interface"
     LIBRARY_VIEW_INTERFACE = "library_view_interface"

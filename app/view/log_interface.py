@@ -2,10 +2,15 @@
 from PyQt5.QtCore import Qt, QSize, QTimer
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QFrame, QApplication, QMainWindow
-from qfluentwidgets import *
+from qfluentwidgets import FluentIcon as FIF, ScrollArea, IconWidget, CaptionLabel, BodyLabel, TransparentToolButton, \
+    PushButton, TransparentToggleToolButton, SwitchButton, VerticalSeparator, SearchLineEdit, ComboBox, StrongBodyLabel, \
+    setTheme, setThemeColor
 import datetime
 import sys
 from enum import Enum
+
+from rich.theme import Theme
+from app.common.style_sheet import StyleSheet
 
 
 class LogLevel(Enum):
@@ -27,11 +32,11 @@ class LogItem(QWidget):
         self.timestamp = datetime.datetime.now()
 
         self.init_ui()
-        self.apply_stylesheet()
 
     def init_ui(self):
         """初始化UI"""
         self.setObjectName("LogItem")
+        StyleSheet.LOG_INTERFACE.apply(self)
 
         layout = QHBoxLayout(self)
         layout.setContentsMargins(12, 8, 12, 8)
@@ -57,24 +62,12 @@ class LogItem(QWidget):
         layout.addWidget(message_label, 1)
 
         # 操作按钮
-        copy_btn = TransparentToolButton(FluentIcon.COPY)
+        copy_btn = TransparentToolButton(FIF.COPY)
         copy_btn.setFixedSize(24, 24)
         copy_btn.setIconSize(QSize(14, 14))
         copy_btn.clicked.connect(self.copy_message)
 
         layout.addWidget(copy_btn)
-
-    def apply_stylesheet(self):
-        """应用样式"""
-        config = LogInterface.LEVEL_CONFIG[self.level]
-        border_color = config['color']
-
-        self.setStyleSheet(f"""
-            #LogItem {{
-                border-left: 3px solid {border_color};
-                background-color: {config['bg_color']};
-            }}
-        """)
 
     def copy_message(self):
         """复制日志消息"""
@@ -91,31 +84,31 @@ class LogInterface(ScrollArea):
         LogLevel.INFO: {
             'name': '信息',
             'color': '#00aaff',
-            'icon': FluentIcon.INFO,
+            'icon': FIF.INFO,
             'bg_color': '#e6f7ff'
         },
         LogLevel.WARNING: {
             'name': '警告',
             'color': '#ff9800',
-            'icon': FluentIcon.QUESTION,
+            'icon': FIF.QUESTION,
             'bg_color': '#fff7e6'
         },
         LogLevel.ERROR: {
             'name': '错误',
             'color': '#f44336',
-            'icon': FluentIcon.CLOSE,
+            'icon': FIF.CLOSE,
             'bg_color': '#ffe6e6'
         },
         LogLevel.DEBUG: {
             'name': '调试',
             'color': '#9c27b0',
-            'icon': FluentIcon.CODE,
+            'icon': FIF.CODE,
             'bg_color': '#f3e6ff'
         },
         LogLevel.SUCCESS: {
             'name': '成功',
             'color': '#4caf50',
-            'icon': FluentIcon.COMPLETED,
+            'icon': FIF.COMPLETED,
             'bg_color': '#e6ffe6'
         }
     }
@@ -128,9 +121,15 @@ class LogInterface(ScrollArea):
         self.max_logs = 1000  # 最大日志数量
         self.filter_level = None  # 当前过滤级别
 
-        self.__initWidget()
+        """初始化界面"""
         self.__initLayout()
-        self.init_ui()
+        self.create_title_bar() # 创建标题栏
+        self.create_tool_bar()  # 创建工具栏
+        self.create_search_box()# 创建搜索框
+        self.create_stats_bar() # 创建统计信息栏
+        self.create_log_list()  # 创建日志列表
+        self.create_bottom_bar()# 创建底部操作栏
+        self.__initWidget()
         self.setup_connections()
         
         # 添加一些示例日志
@@ -140,167 +139,120 @@ class LogInterface(ScrollArea):
         self.add_log("日志系统初始化完成", LogLevel.INFO)
 
     def __initWidget(self):
-        self.setObjectName("LogInterface")
-        self.setWidgetResizable(True)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setObjectName("logInterface")
+        self.view.setObjectName('view')
+        StyleSheet.LOG_INTERFACE.apply(self)
 
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setWidget(self.view)
         self.setWidgetResizable(True)
 
     def __initLayout(self):
+        # 顶层布局
         self.Layout = QHBoxLayout(self.view)
         self.Layout.setContentsMargins(0, 48, 0, 0)
-
+        # 主布局
         self.main_layout = QVBoxLayout()
         self.main_layout.setContentsMargins(20, 20, 20, 20)
         self.main_layout.setSpacing(10)
-
         self.Layout.addLayout(self.main_layout)
-    def init_ui(self):
-        """初始化界面"""
-        # 创建标题栏
-        self.create_title_bar()
-
-        # 创建工具栏
-        self.create_tool_bar()
-
-        # 创建搜索框
-        self.create_search_box()
-
-        # 创建统计信息栏
-        self.create_stats_bar()
-
-        # 创建日志列表
-        self.create_log_list()
-
-        # 创建底部操作栏
-        self.create_bottom_bar()
-
-        # 设置样式
-        self.apply_stylesheet()
 
     def create_title_bar(self):
         """创建标题栏"""
-        title_layout = QHBoxLayout()
-
+        # 创建标题栏
+        self.title_layout = QHBoxLayout()
         # 标题
-        title_label = StrongBodyLabel("日志中心")
-        title_label.setFont(QFont("Segoe UI", 16, QFont.Bold))
-
+        self.title_label = StrongBodyLabel("日志中心")
+        self.title_label.setFont(QFont("Segoe UI", 16, QFont.Bold))
         # 副标题
-        subtitle_label = CaptionLabel("实时记录系统运行状态")
-        subtitle_label.setTextColor("#666666")
-
-        title_layout.addWidget(title_label)
-        title_layout.addSpacing(10)
-        title_layout.addWidget(subtitle_label)
-        title_layout.addStretch()
-
-        self.main_layout.addLayout(title_layout)
+        self.subtitle_label = CaptionLabel("实时记录系统运行状态")
+        self.subtitle_label.setTextColor("#666666")
+        self.title_layout.addWidget(self.title_label)
+        self.title_layout.addSpacing(10)
+        self.title_layout.addWidget(self.subtitle_label)
+        self.title_layout.addStretch()
+        self.main_layout.addLayout(self.title_layout)
 
     def create_tool_bar(self):
         """创建工具栏"""
-        toolbar = QHBoxLayout()
-        toolbar.setSpacing(10)
-
+        # 创建菜单栏
+        self.toolbar = QHBoxLayout()
+        self.toolbar.setSpacing(10)
         # 清空按钮
-        self.clear_btn = TransparentToolButton(FluentIcon.DELETE)
+        self.clear_btn = TransparentToolButton(FIF.DELETE)
         self.clear_btn.setToolTip("清空日志")
         self.clear_btn.setFixedSize(32, 32)
-
         # 导出按钮
-        self.export_btn = TransparentToolButton(FluentIcon.SAVE)
+        self.export_btn = TransparentToolButton(FIF.SAVE)
         self.export_btn.setToolTip("导出日志")
         self.export_btn.setFixedSize(32, 32)
-
         # 级别过滤按钮组
         self.filter_buttons = {}
-
         for level in LogLevel:
             btn = TransparentToggleToolButton(self.LEVEL_CONFIG[level]['icon'])
             btn.setToolTip(f"仅显示{self.LEVEL_CONFIG[level]['name']}")
             btn.setFixedSize(32, 32)
             btn.setProperty('level', level.value)
             self.filter_buttons[level] = btn
-
         # 自动滚动开关
         self.auto_scroll = SwitchButton()
         self.auto_scroll.setChecked(True)
         self.auto_scroll.setText("自动滚动")
-
         # 分隔符
-        separator = VerticalSeparator()
-
-        toolbar.addWidget(self.clear_btn)
-        toolbar.addWidget(self.export_btn)
-        toolbar.addWidget(separator)
-
+        self.separator = VerticalSeparator()
+        self.toolbar.addWidget(self.clear_btn)
+        self.toolbar.addWidget(self.export_btn)
+        self.toolbar.addWidget(self.separator)
         for level in LogLevel:
-            toolbar.addWidget(self.filter_buttons[level])
-
-        toolbar.addStretch()
-        toolbar.addWidget(self.auto_scroll)
-
-        self.main_layout.addLayout(toolbar)
+            self.toolbar.addWidget(self.filter_buttons[level])
+        self.toolbar.addStretch()
+        self.toolbar.addWidget(self.auto_scroll)
+        self.main_layout.addLayout(self.toolbar)
 
     def create_search_box(self):
         """创建搜索框"""
-        search_layout = QHBoxLayout()
-        search_layout.setSpacing(10)
-
+        # 创建搜索栏
+        self.search_layout = QHBoxLayout()
+        self.search_layout.setSpacing(10)
         # 搜索框
         self.search_box = SearchLineEdit()
         self.search_box.setPlaceholderText("搜索日志内容...")
         self.search_box.setFixedHeight(32)
-
         # 时间范围选择
         self.time_filter = ComboBox()
         self.time_filter.setFixedWidth(150)
         self.time_filter.addItems(["全部时间", "最近1小时", "最近24小时", "最近7天"])
-
-        search_layout.addWidget(self.search_box)
-        search_layout.addWidget(self.time_filter)
-
-        self.main_layout.addLayout(search_layout)
-
+        self.search_layout.addWidget(self.search_box)
+        self.search_layout.addWidget(self.time_filter)
+        self.main_layout.addLayout(self.search_layout)
     def create_stats_bar(self):
         """创建统计信息栏"""
         self.stats_widget = QWidget()
-        stats_layout = QHBoxLayout(self.stats_widget)
-        stats_layout.setContentsMargins(10, 5, 10, 5)
-        stats_layout.setSpacing(15)
-
+        self.stats_layout = QHBoxLayout(self.stats_widget)
+        self.stats_layout.setContentsMargins(10, 5, 10, 5)
+        self.stats_layout.setSpacing(15)
         self.stats_labels = {}
-
         for level in LogLevel:
             frame = QFrame()
             frame.setObjectName("StatsFrame")
             frame_layout = QHBoxLayout(frame)
             frame_layout.setContentsMargins(10, 5, 10, 5)
             frame_layout.setSpacing(5)
-
             # 图标
             icon = IconWidget(self.LEVEL_CONFIG[level]['icon'])
             icon.setFixedSize(16, 16)
-
             # 统计标签
             label = BodyLabel("0")
             label.setStyleSheet(f"color: {self.LEVEL_CONFIG[level]['color']}; font-weight: bold;")
-
             # 名称标签
             name_label = CaptionLabel(self.LEVEL_CONFIG[level]['name'])
             name_label.setTextColor("#666666")
-
             frame_layout.addWidget(icon)
             frame_layout.addWidget(label)
             frame_layout.addWidget(name_label)
-
             self.stats_labels[level] = label
-            stats_layout.addWidget(frame)
-
-        stats_layout.addStretch()
-
+            self.stats_layout.addWidget(frame)
+        self.stats_layout.addStretch()
         self.main_layout.addWidget(self.stats_widget)
 
     def create_log_list(self):
@@ -312,6 +264,7 @@ class LogInterface(ScrollArea):
 
         # 日志列表容器
         self.log_container = QWidget()
+        self.log_container.setObjectName("LogContainer")
         self.log_layout = QVBoxLayout(self.log_container)
         self.log_layout.setAlignment(Qt.AlignTop)
         self.log_layout.setSpacing(2)
@@ -336,11 +289,11 @@ class LogInterface(ScrollArea):
 
         # 操作按钮
         self.copy_selected_btn = PushButton("复制选中", self)
-        self.copy_selected_btn.setIcon(FluentIcon.COPY)
+        self.copy_selected_btn.setIcon(FIF.COPY)
         self.copy_selected_btn.setEnabled(False)
 
         self.save_all_btn = PushButton("保存全部", self)
-        self.save_all_btn.setIcon(FluentIcon.SAVE)
+        self.save_all_btn.setIcon(FIF.SAVE)
 
         bottom_bar.addWidget(self.count_label)
         bottom_bar.addStretch()
@@ -361,32 +314,6 @@ class LogInterface(ScrollArea):
 
         self.copy_selected_btn.clicked.connect(self.copy_selected)
         self.save_all_btn.clicked.connect(self.save_all_logs)
-
-    def apply_stylesheet(self):
-        """应用样式表"""
-        self.setStyleSheet("""
-            LogInterface {
-                background-color: transparent;
-            }
-            #LogContainer {
-                background-color: transparent;
-            }
-            #StatsFrame {
-                background-color: rgba(0, 0, 0, 0.03);
-                border-radius: 8px;
-                border: 1px solid rgba(0, 0, 0, 0.05);
-            }
-            LogItem {
-                background-color: transparent;
-                border: 1px solid rgba(0, 0, 0, 0.08);
-                border-radius: 8px;
-                padding: 10px;
-            }
-            LogItem:hover {
-                background-color: rgba(0, 0, 0, 0.02);
-                border-color: rgba(0, 0, 0, 0.12);
-            }
-        """)
 
     def add_log(self, message: str, level: LogLevel = LogLevel.INFO):
         """添加日志条目"""
@@ -487,7 +414,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     # 设置Fluent样式
-    setTheme(Theme.AUTO)
+    # setTheme(Theme.LIGHT)
     setThemeColor('#0078d4')
 
     window = QMainWindow()

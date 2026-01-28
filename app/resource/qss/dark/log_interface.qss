@@ -1,0 +1,36 @@
+LogInterface, #view {
+    background-color: transparent;
+}
+
+ScrollArea {
+    border: none;
+    background-color: transparent;
+}
+
+#LogContainer {
+    border: 1px solid rgb(36, 36, 36);
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.1795);
+}
+
+#LogItem {
+    border-left: 3px solid {border_color};
+    background-color: {config['bg_color']};
+}
+
+
+#StatsFrame {
+    background-color: rgba(0, 0, 0, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+LogItem {
+    background-color: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    padding: 10px;
+}
+LogItem:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.12);
+}

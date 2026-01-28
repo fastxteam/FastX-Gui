@@ -8,6 +8,7 @@ from qfluentwidgets import (qconfig, QConfig, ConfigItem, OptionsConfigItem, Boo
                             OptionsValidator, RangeConfigItem, RangeValidator,
                             FolderListValidator, Theme, FolderValidator, ConfigSerializer, __version__)
 
+from .setting import CONFIG_FILE
 
 class Language(Enum):
     """ Language enumeration """
@@ -75,4 +76,4 @@ class Config(QConfig):
 
 cfg = Config()
 cfg.themeMode.value = Theme.AUTO
-qconfig.load('app/config/config.json', cfg)
+qconfig.load(str(CONFIG_FILE.absolute()), cfg)
